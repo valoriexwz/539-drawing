@@ -13,20 +13,23 @@ window.addEventListener("load", () => {
 	canvas.height = 0.8 * pageHeight;
 
 
+	function drawRect(x1, y1, color) {
+		if (!penPicked) return;
+		ctx.fillRect(x1, y1, 30, 30);
+		ctx.strokeStyle = color;
+	}
 
-	function ontouchmove(e) {
-		console.log("touched");
-		let x = e.clientX;
-		let y = e.clientY;
+	function onmousemove (e) {
+		console.log("move");
+		var x = e.clientX;
+		var y = e.clientY;
 		if (penPicked === true) {
-			drawRect(x - 15, y - 15, penColor)
+			drawRect(x - 15, y - 15, penColor);
 		}
-	};
+	}
 
 
-
-
-	function presskey(e) {
+	document.onkeydown = (e) => {
 		console.log("pressed");
 		if (e.keyCode === 32) {
 			console.log("space pressed");
@@ -50,30 +53,20 @@ window.addEventListener("load", () => {
 			penPicked = false;
 			document.getElementById('annotation').innerHTML = "Please pick a pen with up arrow First";
 		}
-	}
+	};
 	colorPicker.addEventListener("input", e => penColor = colorPicker.value);
 	window.onresize = resizeCanvas;
 
+	function resizeCanvas() {
+		let currHeight = document.documentElement.clientHeight;
+		let currWidth = document.documentElement.clientWidth;
+		let canvasHeight = 0.8 * currHeight;
+		let canvasWidth = 0.8 * currWidth;
+		canvas.width = canvasWidth;
+		canvas.height = canvasHeight;
+	}
 
-
-	canvas.addEventListener('mousemove', ontouchmove);
-	canvas.addEventListener('keydown', presskey);
-
+	canvas.addEventListener("mousemove",onmousemove)
+	
 
 });
-
-function resizeCanvas() {
-	var currHeight = document.documentElement.clientHeight;
-	var currWidth = document.documentElement.clientWidth;
-	var canvasHeight = 0.8*currHeight;
-	var canvasWidth = 0.8*currWidth;
-	canvas.width = canvasWidth;
-	canvas.height = canvasHeight;
-}
-
-function drawRect(x, y, color) {
-	ctx.save();
-	ctx.beginPath();
-	ctx.rect(x, y, 30, 30);
-	ctx.fill(color);
-};

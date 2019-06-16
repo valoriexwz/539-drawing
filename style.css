@@ -1,10 +1,4 @@
-* {
-	margin:0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-#canvas {
+canvas {
 	width: 80%;
-	border: 1px solid black;
+	border: black 1px solid;
 }
