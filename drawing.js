@@ -5,56 +5,69 @@ window.addEventListener("load", () => {
 	let pageWidth = document.documentElement.clientWidth;
 	let pageHeight = document.documentElement.clientHeight;
 
-	let penColor = "#ff0000"
+	let drawColor = "#ff0000"
 	let colorPicker = document.getElementById("colorpicker");
 
-	let penPicked = false;
+	let painting = false;
 	canvas.width = 0.8 * pageWidth;
 	canvas.height = 0.8 * pageHeight;
 
 
 	function drawRect(x1, y1, color) {
-		if (!penPicked) return;
+		if (!painting) return;
 		ctx.fillRect(x1, y1, 30, 30);
-		ctx.strokeStyle = color;
+		ctx.fillStyle = color;
 	}
 
-	function onmousemove (e) {
+	function onMouseMove(e) {
 		console.log("move");
 		var x = e.clientX;
 		var y = e.clientY;
-		if (penPicked === true) {
-			drawRect(x - 15, y - 15, penColor);
+		if (painting === true) {
+			drawRect(x - 15, y - 15, drawColor);
+		}
+	}
+
+	function onTouchMove(e) {
+		console.log("touched");
+		var x = e.touches[0].clientX;
+		var y = e.touches[0].clientY;
+		if (painting === true) {
+			drawRect(x - 15, y - 15, drawColor);
 		}
 	}
 
 
-	document.onkeydown = (e) => {
-		console.log("pressed");
+	document.onKeyDown = (e) => {
+		console.log("key");
 		if (e.keyCode === 32) {
-			console.log("space pressed");
+			console.log("space key");
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			ctx.restore();
 		} else if (e.keyCode === 66) {
-			console.log("b pressed");
-			penColor = "#0000ff";
+			console.log("b key");
+			drawColor = "#0000ff";
 		} else if (e.keyCode === 71) {
-			console.log("g pressed");
-			penColor = "#00ff00";
+			console.log("g key");
+			drawColor = "#00ff00";
+		} else if (e.keyCode === 82) {
+			console.log("r key");
+			drawColor = "#ff0000";
 		} else if (e.keyCode === 89) {
-			console.log("y pressed");
-			penColor = "#ffff00";
+			console.log("y key");
+			drawColor = "#ffff00";
 		} else if (e.keyCode === 38) {
 			console.log("arrowUp pressed");
-			penPicked = true;
-			document.getElementById('annotation').innerHTML = "pen picked";
+			painting = true;
+			document.getElementById('annotation').innerHTML = "You've picked up a pen. Enjoy drawing!";
 		} else if (e.keyCode === 40) {
 			console.log("arrowDown pressed");
-			penPicked = false;
-			document.getElementById('annotation').innerHTML = "Please pick a pen with up arrow First";
+			painting = false;
+			document.getElementById('annotation').innerHTML = 'Hit "arrow up" key to pick up the pen and start drawing.';
 		}
 	};
-	colorPicker.addEventListener("input", e => penColor = colorPicker.value);
+
+	colorPicker.addEventListener("input", e => drawColor = colorPicker.value);
 	window.onresize = resizeCanvas;
 
 	function resizeCanvas() {
@@ -66,7 +79,9 @@ window.addEventListener("load", () => {
 		canvas.height = canvasHeight;
 	}
 
-	canvas.addEventListener("mousemove",onmousemove)
-	
+	canvas.addEventListener("mousemove", onMouseMove)
+	canvas.addEventListener("touchmove", onTouchMove)
+
+
 
 });
